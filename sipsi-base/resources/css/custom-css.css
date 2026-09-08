@@ -1,0 +1,524 @@
+.sidebar-active {
+  @apply bg-themecolor-secondary text-themecolor-primary transition-colors duration-300 ease-in-out rounded-lg;
+}
+
+.sidebar-active > svg {
+  @apply text-themecolor-primary;
+}
+
+.sidebar-active:hover {
+  @apply bg-themecolor-secondary bg-opacity-80 text-themecolor-primary;
+}
+
+.sidebar-collapsed {
+  width: 80px;
+}
+
+.sidebar-collapsed .text {
+  opacity: 0;
+  white-space: nowrap;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-collapsed .sidebar-active {
+  @apply bg-themecolor-secondary bg-opacity-80 w-10 transition-colors duration-1000 ease-in-out rounded-lg;
+}
+
+.sidebar-collapsed .mini-sidebar {
+  @apply w-10 ml-1;
+}
+
+.sidebar-collapsed .sub-menu {
+  @apply pl-2 transition-transform duration-500 ease-in-out;
+}
+
+#logo-sidebar {
+  @apply transition-all duration-300 ease-in-out overflow-x-hidden;
+}
+
+#logo-sidebar .text {
+  @apply transition-transform duration-300 ease-in-out text-nowrap;
+}
+
+.table-jadwal > tbody > tr:nth-child(odd) {
+  @apply bg-white text-center text-black;
+}
+
+.table-jadwal > tbody > tr:nth-child(even) {
+  @apply bg-gray-200 text-center text-black;
+}
+
+.table-jadwal > thead > tr > th {
+  @apply !text-center;
+}
+
+.table-sengketa > tbody > tr:nth-child(odd) {
+  @apply bg-white text-center text-primary font-semibold;
+}
+
+.table-sengketa > tbody > tr:nth-child(even) {
+  @apply bg-gray-200 text-center text-primary font-semibold;
+}
+
+.table-sengketa > thead > tr > th {
+  @apply !text-center;
+}
+
+.table-sengketa > tbody > tr > td:nth-child(3) {
+  @apply !max-w-48 truncate hover:!max-w-full;
+}
+
+.table-dashboard-pemohon > tbody > tr:nth-child(odd) {
+  @apply bg-white text-center text-primary font-semibold;
+}
+
+.table-dashboard-pemohon > tbody > tr:nth-child(even) {
+  @apply bg-gray-200 text-center text-primary font-semibold;
+}
+
+.table-dashboard-pemohon > thead > tr > th:nth-child(odd) {
+  @apply !text-center;
+}
+
+.table-dashboard-pemohon > tbody > tr > td:nth-child(even) {
+  @apply !text-start;
+}
+
+.dt-length > select {
+  @apply bg-white;
+}
+
+.pagination > a {
+  @apply bg-white text-black hover:text-themecolor-primary;
+}
+
+.td-detail-jadwal {
+  @apply lg:w-[500px] sm:w-[300px] w-[200px] md:w-[350px] bg-white text-black;
+}
+
+.td-perangkat-sidang {
+  @apply lg:w-[500px] sm:w-[300px] w-[200px] md:w-[350px] bg-white text-black;
+}
+
+.grid-detail-sengketa {
+  @apply text-xl md:text-2xl lg:text-2xl p-4;
+}
+
+.grid-perangkat-sidang {
+  @apply text-xl md:text-2xl lg:text-2xl p-4;
+}
+
+.datepicker > div {
+  @apply bg-white;
+}
+
+.datepicker-controls > button {
+  @apply bg-themecolor-primary hover:bg-red-800 text-white;
+}
+
+.datepicker-controls > button > svg {
+  @apply text-white;
+}
+
+.days-of-week > span {
+  @apply text-black;
+}
+
+.datepicker-grid > span.prev {
+  @apply text-gray-400 hover:bg-themecolor-primary hover:text-white;
+}
+.datepicker-grid > span.next {
+  @apply text-gray-400 hover:bg-themecolor-primary hover:text-white;
+}
+.datepicker-grid > span.focused {
+  @apply bg-themecolor-primary text-white hover:bg-red-800;
+}
+.datepicker-grid > span {
+  @apply text-black hover:bg-themecolor-primary hover:text-white;
+}
+
+.select2.select2-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.select2.select2-container .select2-selection {
+  border: 1px solid #ae0008;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  height: 40px;
+  padding: 6px;
+  outline: none !important;
+  transition: all 0.15s ease-in-out;
+}
+
+.select2.select2-container .select2-selection .select2-selection__rendered {
+  color: #747474;
+  padding-right: 33px;
+}
+
+.select2.select2-container .select2-selection .select2-selection__arrow {
+  background: #fff;
+  -webkit-border-radius: 0 8px 8px 0;
+  -moz-border-radius: 0 8px 8px 0;
+  border-radius: 0 8px 8px 0;
+  height: 38px;
+  width: 33px;
+}
+
+.select2.select2-container.select2-container--open
+  .select2-selection.select2-selection--single {
+  background: #fff;
+}
+
+.select2.select2-container.select2-container--open
+  .select2-selection.select2-selection--single
+  .select2-selection__arrow {
+  -webkit-border-radius: 0 3px 0 0;
+  -moz-border-radius: 0 3px 0 0;
+  border-radius: 0 3px 0 0;
+}
+
+.select2.select2-container.select2-container--open
+  .select2-selection.select2-selection--multiple {
+  border: 1px solid #34495e;
+}
+
+.select2.select2-container .select2-selection--multiple {
+  height: auto;
+  min-height: 34px;
+}
+
+.select2.select2-container
+  .select2-selection--multiple
+  .select2-search--inline
+  .select2-search__field {
+  margin-top: 0;
+  height: 32px;
+}
+
+.select2.select2-container
+  .select2-selection--multiple
+  .select2-selection__rendered {
+  display: block;
+  padding: 0 4px;
+  line-height: 29px;
+}
+
+.select2.select2-container
+  .select2-selection--multiple
+  .select2-selection__choice {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 4px 4px 0 0;
+  padding: 0 6px 0 22px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
+  position: relative;
+}
+
+.select2.select2-container
+  .select2-selection--multiple
+  .select2-selection__choice
+  .select2-selection__choice__remove {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 22px;
+  width: 22px;
+  margin: 0;
+  text-align: center;
+  color: #e74c3c;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.select2-container .select2-dropdown {
+  background: transparent;
+  border: none;
+  margin-top: -5px;
+}
+
+.select2-container .select2-dropdown .select2-search {
+  padding: 0;
+}
+
+.select2-container .select2-dropdown .select2-search input {
+  outline: none !important;
+  border: 1px solid #34495e !important;
+  border-bottom: none !important;
+  padding: 4px 6px !important;
+}
+
+.select2-container .select2-dropdown .select2-results {
+  padding: 0;
+}
+
+.select2-container .select2-dropdown .select2-results ul {
+  background: #fff;
+  border: 1px solid #34495e;
+}
+
+.select2-container
+  .select2-dropdown
+  .select2-results
+  ul
+  .select2-results__option--highlighted[aria-selected] {
+  background-color: #ae0008;
+}
+
+:root {
+  --dt-row-selected: 13, 110, 253;
+  --dt-row-selected-text: 255, 255, 255;
+  --dt-row-selected-link: 9, 10, 11;
+  --dt-row-stripe: 0, 0, 0;
+  --dt-row-hover: 0, 0, 0;
+  --dt-column-ordering: 0, 0, 0;
+  --dt-html-background: white;
+}
+:root.dark {
+  --dt-html-background: rgb(33, 37, 41);
+}
+
+table.dataTable td.dt-control {
+  text-align: center;
+  cursor: pointer;
+}
+table.dataTable td.dt-control:before {
+  display: inline-block;
+  box-sizing: border-box;
+  content: "";
+  border-top: 5px solid transparent;
+  border-left: 10px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid transparent;
+  border-right: 0px solid transparent;
+}
+table.dataTable tr.dt-hasChild td.dt-control:before {
+  border-top: 10px solid rgba(0, 0, 0, 0.5);
+  border-left: 5px solid transparent;
+  border-bottom: 0px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+html.dark table.dataTable td.dt-control:before,
+:root[data-bs-theme="dark"] table.dataTable td.dt-control:before {
+  border-left-color: rgba(255, 255, 255, 0.5);
+}
+html.dark table.dataTable tr.dt-hasChild td.dt-control:before,
+:root[data-bs-theme="dark"]
+  table.dataTable
+  tr.dt-hasChild
+  td.dt-control:before {
+  border-top-color: rgba(255, 255, 255, 0.5);
+  border-left-color: transparent;
+}
+
+div.dt-scroll-body thead tr,
+div.dt-scroll-body tfoot tr {
+  height: 0;
+}
+div.dt-scroll-body thead tr th,
+div.dt-scroll-body thead tr td,
+div.dt-scroll-body tfoot tr th,
+div.dt-scroll-body tfoot tr td {
+  height: 0 !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+  border-top-width: 0px !important;
+  border-bottom-width: 0px !important;
+}
+div.dt-scroll-body thead tr th div.dt-scroll-sizing,
+div.dt-scroll-body thead tr td div.dt-scroll-sizing,
+div.dt-scroll-body tfoot tr th div.dt-scroll-sizing,
+div.dt-scroll-body tfoot tr td div.dt-scroll-sizing {
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+table.dataTable thead > tr > th:active,
+table.dataTable thead > tr > td:active {
+  outline: none;
+}
+table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before {
+  position: absolute;
+  display: block;
+  bottom: 50%;
+  content: "▲";
+  content: "▲"/"";
+}
+table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+  position: absolute;
+  display: block;
+  top: 50%;
+  content: "▼";
+  content: "▼"/"";
+}
+table.dataTable thead > tr > th.dt-orderable-asc,
+table.dataTable thead > tr > th.dt-orderable-desc,
+table.dataTable thead > tr > th.dt-ordering-asc,
+table.dataTable thead > tr > th.dt-ordering-desc,
+table.dataTable thead > tr > td.dt-orderable-asc,
+table.dataTable thead > tr > td.dt-orderable-desc,
+table.dataTable thead > tr > td.dt-ordering-asc,
+table.dataTable thead > tr > td.dt-ordering-desc {
+  position: relative;
+  padding-right: 30px;
+}
+table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order,
+table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order,
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order,
+table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order,
+table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order {
+  position: absolute;
+  right: 12px;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+}
+table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-orderable-asc span.dt-column-order:after,
+table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:after,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-orderable-asc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-orderable-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+  left: 0;
+  opacity: 0.125;
+  line-height: 9px;
+  font-size: 0.8em;
+}
+table.dataTable thead > tr > th.dt-orderable-asc,
+table.dataTable thead > tr > th.dt-orderable-desc,
+table.dataTable thead > tr > td.dt-orderable-asc,
+table.dataTable thead > tr > td.dt-orderable-desc {
+  cursor: pointer;
+}
+table.dataTable thead > tr > th.dt-orderable-asc:hover,
+table.dataTable thead > tr > th.dt-orderable-desc:hover,
+table.dataTable thead > tr > td.dt-orderable-asc:hover,
+table.dataTable thead > tr > td.dt-orderable-desc:hover {
+  outline: 2px solid rgba(0, 0, 0, 0.05);
+  outline-offset: -2px;
+}
+table.dataTable thead > tr > th.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > th.dt-ordering-desc span.dt-column-order:after,
+table.dataTable thead > tr > td.dt-ordering-asc span.dt-column-order:before,
+table.dataTable thead > tr > td.dt-ordering-desc span.dt-column-order:after {
+  opacity: 0.6;
+}
+table.dataTable
+  thead
+  > tr
+  > th.sorting_desc_disabled
+  span.dt-column-order:after,
+table.dataTable
+  thead
+  > tr
+  > th.sorting_asc_disabled
+  span.dt-column-order:before,
+table.dataTable
+  thead
+  > tr
+  > td.sorting_desc_disabled
+  span.dt-column-order:after,
+table.dataTable
+  thead
+  > tr
+  > td.sorting_asc_disabled
+  span.dt-column-order:before {
+  display: none;
+}
+table.dataTable thead > tr > th:active,
+table.dataTable thead > tr > td:active {
+  outline: none;
+}
+
+div.dt-scroll-body > table.dataTable > thead > tr > th,
+div.dt-scroll-body > table.dataTable > thead > tr > td {
+  overflow: hidden;
+}
+
+:root.dark table.dataTable thead > tr > th.dt-orderable-asc:hover,
+:root.dark table.dataTable thead > tr > th.dt-orderable-desc:hover,
+:root.dark table.dataTable thead > tr > td.dt-orderable-asc:hover,
+:root.dark table.dataTable thead > tr > td.dt-orderable-desc:hover,
+:root[data-bs-theme="dark"]
+  table.dataTable
+  thead
+  > tr
+  > th.dt-orderable-asc:hover,
+:root[data-bs-theme="dark"]
+  table.dataTable
+  thead
+  > tr
+  > th.dt-orderable-desc:hover,
+:root[data-bs-theme="dark"]
+  table.dataTable
+  thead
+  > tr
+  > td.dt-orderable-asc:hover,
+:root[data-bs-theme="dark"]
+  table.dataTable
+  thead
+  > tr
+  > td.dt-orderable-desc:hover {
+  outline: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.file-input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  cursor: pointer;
+}
+
+.file-label {
+  display: inline-block;
+  background-color: red;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.file-label:hover {
+  background-color: darkred;
+}
+
+#documentModal {
+  transition: opacity 0.3s ease;
+}

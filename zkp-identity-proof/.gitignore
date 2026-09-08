@@ -1,0 +1,31 @@
+# Build artifacts
+build/
+artifacts/
+cache/
+ignition/deployments/
+
+# Compiled circuit outputs
+*.r1cs
+*.wasm
+*.zkey
+*.sym
+*.wtns
+
+# ZKP related proofs
+proof.json
+public.json
+witness.wtns
+verification_key.json
+
+# Input
+input.json
+
+# Node dependencies
+node_modules/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
