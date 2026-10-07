@@ -36,12 +36,19 @@ describe("IdentityZKP", function () {
     expect(approved).to.be.true;
   });
 
-  it("should verify valid proof and mark user as verified", async () => {
+  it("should verify valid proof and mark user as verified", async function () {
+    const proofPath = path.join(__dirname, "../build/proof_zkp.json");
+    const publicSignalsPath = path.join(__dirname, "../build/public_zkp.json");
+    if (!fs.existsSync(proofPath) || !fs.existsSync(publicSignalsPath)) {
+      this.skip();
+      return;
+    }
+
     const proof = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "../build/proof_zkp.json"))
+      fs.readFileSync(proofPath)
     );
     const publicSignals = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "../build/public_zkp.json"))
+      fs.readFileSync(publicSignalsPath)
     );
 
     const a = [proof.pi_a[0], proof.pi_a[1]];

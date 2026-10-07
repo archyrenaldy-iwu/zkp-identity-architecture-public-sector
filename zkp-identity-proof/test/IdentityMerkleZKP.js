@@ -26,7 +26,7 @@ describe("IdentityMerkleZKP", function () {
 
     // Deploy IdentityMerkleZKP contract
     const IdentityMerkleZKPFactory = await ethers.getContractFactory(
-      "IdentityMerkleZKP"
+      "contracts/IdentityMerkleZKP.sol:IdentityMerkleZKP"
     );
     identityMerkleZkp = await IdentityMerkleZKPFactory.connect(admin).deploy(
       await verifier.getAddress()
@@ -45,7 +45,7 @@ describe("IdentityMerkleZKP", function () {
 
     it("should reject deployment with invalid verifier", async () => {
       const IdentityMerkleZKPFactory = await ethers.getContractFactory(
-        "IdentityMerkleZKP"
+        "contracts/IdentityMerkleZKP.sol:IdentityMerkleZKP"
       );
 
       await expect(
@@ -281,7 +281,7 @@ describe("IdentityMerkleZKP", function () {
     it("should reject verification with no Merkle root set", async () => {
       // Deploy new contract without setting root
       const IdentityMerkleZKPFactory = await ethers.getContractFactory(
-        "IdentityMerkleZKP"
+        "contracts/IdentityMerkleZKP.sol:IdentityMerkleZKP"
       );
       const newContract = await IdentityMerkleZKPFactory.connect(admin).deploy(
         await verifier.getAddress()

@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the associated paper."
+title: "Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge Identity Verification Architecture for Public-Sector Blockchain Platforms"
+authors:
+  - family-names: Nugraha
+    given-names: Archy Renaldy Pratama
+    affiliation: "IPB University; International Women University"
+  - family-names: Arkeman
+    given-names: Yandra
+    affiliation: "IPB University"
+  - family-names: Hermadi
+    given-names: Irman
+    affiliation: "IPB University"
+  - family-names: Nurhadryani
+    given-names: Yani
+    affiliation: "IPB University"
+repository-code: "https://github.com/archyrenaldy-iwu/zkp-identity-architecture-public-sector"
