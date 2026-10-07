@@ -1,152 +1,119 @@
 # SIPSI AI x Blockchain: Zero-Knowledge Identity Verification Architecture for Public-Sector Platforms
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Blockchain](https://img.shields.io/badge/Blockchain-Polygon%20Mainnet-3670A0?logo=polygon)](https://polygon.technology/)
-[![ZKP](https://img.shields.io/badge/Zero--Knowledge-Groth16%20%7C%20BN254-purple)](https://iden3.io/)
-[![AI Architecture](https://img.shields.io/badge/AI-RoBERTa%20%7C%20IndoBERT-orange)](https://huggingface.org/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
-## 1. Project Overview
+## 1. Title and Description
 
-This repository contains the official codebase, smart contracts, zero-knowledge circuits, AI microservices, and mainnet verification scripts for the research paper:
+Official codebase, smart contracts, zero-knowledge circuits, AI microservices, datasets, and mainnet verification scripts for the paper:
 
-> **"Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge Identity Verification Architecture for Public-Sector Blockchain Platforms"**
-> 
-> **Authors**: Archy Renaldy Pratama Nugraha, Yandra Arkeman, Irman Hermadi, Yani Nurhadryani  
-> **Affiliations**: IPB University & International Women University (IWU)
+> **Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge Identity Verification Architecture for Public-Sector Blockchain Platforms** (PeerJ Computer Science, manuscript CS-2026:08:147906)
 
-The platform addresses the **Digital Verification Trilemma** in decentralized public-sector e-governance by combining a 3+1 Parameter Augmentation ZKP scheme (Groth16 over BN254), deterministic nullifier replay mitigation, and AI-driven document verification & legal decision recommendation.
-
----
+The project combines a 3+1 Parameter Augmentation scheme (Groth16 over BN254, Poseidon commitments, Sparse Merkle Tree), deterministic nullifier anti-replay state-locking, Mythril bytecode auditing, and live Polygon Mainnet validation (Chi-Square session unlinkability test).
 
 ## 2. Repository Structure
 
-```directory
+```
 .
-├── data/                      # Experimental & empirical datasets
-│   ├── ai_rekomendasi_retrain.csv             # RoBERTa 13-class model fine-tuning dataset
-│   ├── ai_verifikasi_retrain.csv              # IndoBERT NER extraction fine-tuning dataset
-│   ├── polygon_mainnet_transactions_zkp.csv   # Live Polygon Mainnet ZKP contract transaction logs (n=229)
-│   └── polygon_mainnet_transactions_sengketa.csv # Live Polygon Mainnet Sengketa contract transaction logs
-├── docs/                      # Technical documentation for Modules 1-4
-│   ├── modul-1-identitas-digital.md
-│   ├── modul-2-pencatatan-sengketa-blockchain.md
-│   ├── modul-3-verifikasi-putusan.md
-│   └── modul-4-rekomendasi-putusan.md
-├── zkp-identity-proof/        # Modul 1: Groth16 Circom Circuits & Verification Contracts
-├── zkp-identity-backend/      # Modul 1: Off-chain Merkle Tree accumulator & ZKP service
-├── sengketa-contract/         # Modul 2: Dispute Workflow Smart Contracts (Solidity FSM & OpenZeppelin RBAC)
-├── sengketa-backend/          # Modul 2: Express.js API & IPFS (Pinata) storage anchor service
-├── ai-service/                # Modul 3 & 4: IndoBERT NER extraction & RoBERTa UU KIP Recommendation Engine
-└── sipsi-base/                # Core SIPSI web portal integration framework
+├── data/                      # Datasets and mainnet transaction logs
+├── docs/                      # Technical documentation (Modules 1-4)
+├── zkp-identity-proof/        # Module 1: Circom circuits, verifier contracts, Hardhat tests
+├── zkp-identity-backend/      # Module 1: Merkle accumulator and ZKP service
+├── sengketa-contract/         # Module 2: dispute workflow smart contracts
+├── sengketa-backend/          # Module 2: Express.js API and IPFS anchoring
+├── ai-service/                # Modules 3-4: IndoBERT NER and RoBERTa recommendation
+└── sipsi-base/                # Core SIPSI web portal integration
 ```
 
----
+## 3. Dataset Information
 
-## 3. Core Architecture & Empirical Highlights
+| File | Content | Used for |
+|---|---|---|
+| `data/polygon_mainnet_transactions_zkp.csv` | Raw Polygon Mainnet logs of the ZKP identity contract (`0xF99024c6E16c2dCCA305DAF4406b17D93F22a72f`), n = 229 | Chi-Square unlinkability test (Equation 4 in the paper) |
+| `data/polygon_mainnet_transactions_sengketa.csv` | Raw Polygon Mainnet logs of the dispute workflow contract (`0x7f6979426Bf7eBcA11C81025359D123b8B9C5Baf`) | Gas cost and method distribution (Figures 6-7) |
+| `data/ai_rekomendasi_retrain.csv` | Labeled data, RoBERTa 13-class legal recommendation | Module 4 |
+| `data/ai_verifikasi_retrain.csv` | Labeled data, IndoBERT NER | Module 3 |
 
-| Component | Technical Implementation | Empirical Benchmarks / Audit Results |
-| :--- | :--- | :--- |
-| **ZKP Circuit (Circom)** | 3+1 Parameter Augmentation Scheme (`IdentityMerkleProof.circom`) | **8,372** non-linear constraints, **2.14s** edge proving duration |
-| **Bytecode Security Audit** | Mythril symbolic execution on compiled EVM bytecode | **0** High/Medium severity vulnerabilities (SWC-113 low informational) |
-| **Anti-Replay Nullifier** | Deterministic nullifier state-locking (`IdentityMerkleZKP.sol`) | **50/50 (100%)** duplicate-proof replay attacks blocked |
-| **Live Mainnet Validation** | Polygon Mainnet transactions ($n = 229$) | **0.00905 POL** avg gas fee, Uniform distribution ($\chi^2 = 1.24, p = 0.265 > 0.05$) |
-| **AI Verification & Recommendation** | IndoBERT NER (`cahya/indobert-base-indonesian-NER`) & RoBERTa (`cahya/roberta-base-indonesian-522M`) | Automated PII redaction, PDF extraction, & 13 UU KIP legal categories ranking |
+**Provenance (third-party data):** administrative dispute records come from the JDIH (Jaringan Dokumentasi dan Informasi Hukum) of the Central Information Commission of the Republic of Indonesia (Komisi Informasi Pusat RI), public documents under Law No. 14 of 2008 (KIP Act). Mainnet logs were generated by the authors' own contracts and are verifiable on Polygonscan.
 
----
+**Privacy:** citizen identities are represented only by Poseidon hash commitments. Raw NIK and credential witnesses stay off-chain and are not in this repository.
 
-## 4. Dataset & Data Provenance
+## 4. Code Information
 
-- **Third-Party Data Source**: **JDIH Komisi Informasi Pusat RI** (Jaringan Dokumentasi dan Informasi Hukum - Central Information Commission of the Republic of Indonesia).
-- **Dataset & Empirical Logs**: Experimental CSV datasets and raw mainnet transaction logs are hosted under [`data/`](data/):
-  - [`data/ai_rekomendasi_retrain.csv`](data/ai_rekomendasi_retrain.csv): Labeled dataset for RoBERTa 13-class UU KIP legal decision recommendation model.
-  - [`data/ai_verifikasi_retrain.csv`](data/ai_verifikasi_retrain.csv): Labeled dataset for IndoBERT Named Entity Recognition (NER) decision verification.
-  - [`data/polygon_mainnet_transactions_zkp.csv`](data/polygon_mainnet_transactions_zkp.csv): Raw Polygon Mainnet transaction logs for ZKP Identity verification (`0xF99024c6E16c2dCCA305DAF4406b17D93F22a72f`) used for Chi-Square session unlinkability validation ($n = 229$).
-  - [`data/polygon_mainnet_transactions_sengketa.csv`](data/polygon_mainnet_transactions_sengketa.csv): Raw Polygon Mainnet transaction logs for Sengketa dispute workflow contract (`0x7f6979426Bf7eBcA11C81025359D123b8B9C5Baf`).
-- **Domain**: Public Information Dispute Resolution Records (*Sengketa Informasi Publik*).
-- **Access & License**: Data was collected from the public domain under Indonesian Law No. 14 of 2008 (KIP Act).
-- **Privacy Assurance**: All citizen identities are anonymized using Poseidon Hash representations; raw NIK and credential witness vectors remain strictly edge-side/off-chain.
+| Component | File | Result reported in the paper |
+|---|---|---|
+| ZKP circuit | `zkp-identity-proof/circuits/IdentityMerkleProof.circom` | 8,372 non-linear constraints, 9,545 linear constraints, 2.14 s proving |
+| Anti-replay contract | `IdentityMerkleZKP.sol` | 50/50 replay attempts blocked |
+| Verifier | `Groth16Verifier` | Mythril: 0 high/medium findings (SWC-113 low, informational) |
+| AI service | `ai-service/app.py` | IndoBERT NER and RoBERTa recommendation |
 
----
+## 5. Requirements
 
-## 5. Installation & Setup
+| Dependency | Version |
+|---|---|
+| Node.js | 18.x or higher |
+| Python | 3.8 - 3.10 |
+| Circom | 2.1.6 |
+| snarkjs | 0.7.3 |
+| Hardhat | see `package.json` |
+| Mythril | 0.24.8 (Docker image `mythril/myth:0.24.8`) |
+| Python libraries | `ai-service/requirements.txt` |
 
-### Prerequisites
-- **Node.js**: v18.x or higher
-- **Python**: v3.8 - v3.10
-- **Circom**: v2.1.6
-- **Hardhat / Mythril** (for smart contract testing & bytecode auditing)
+## 6. Usage Instructions
 
-### Step-by-Step Installation
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/archyrenaldy-iwu/zkp-identity-architecture-public-sector.git
-   cd zkp-identity-architecture-public-sector
-   ```
-
-2. **Module 1 & 2 Dependencies**:
-   ```bash
-   # ZKP Proof Engine
-   cd zkp-identity-proof && npm install && cd ..
-
-   # Sengketa Contracts
-   cd sengketa-contract && npm install && cd ..
-   ```
-
-3. **Module 3 & 4 AI Service**:
-   ```bash
-   cd ai-service
-   pip install -r requirements.txt
-   ```
-
----
-
-## 6. Reproducibility & Testing
-
-### Running ZKP Circuit Tests
 ```bash
-cd zkp-identity-proof
-npm run test
+git clone https://github.com/archyrenaldy-iwu/zkp-identity-architecture-public-sector.git
+cd zkp-identity-architecture-public-sector
+
+# Module 1 and 2
+cd zkp-identity-proof && npm install && cd ..
+cd sengketa-contract && npm install && cd ..
+
+# Modules 3 and 4
+cd ai-service && pip install -r requirements.txt && cd ..
 ```
 
-### Running Hardhat Replay-Attack Simulation (50 Concurrent Replays)
+Reproduce the paper results:
+
 ```bash
+# 1. Circuit compilation (Figure 3)
 cd zkp-identity-proof
+circom IdentityMerkleProof.circom --r1cs --wasm --sym -l node_modules
+
+# 2. Replay-attack simulation, 50 duplicate proofs (Figure 5)
 npx hardhat test
+
+# 3. Bytecode audit (Figure 4)
+docker run -v ${PWD}:/tmp mythril/myth:0.24.8 analyze /tmp/IdentityMerkleVerifier.sol /tmp/IdentityMerkleZKP.sol /tmp/IdentityVerifier.sol /tmp/IdentityZKP.sol --execution-timeout 600
+
+# 4. AI service
+cd ../ai-service && python app.py
 ```
 
-### Running AI Decision Verification & Recommendation Service
-```bash
-cd ai-service
-python app.py
-```
+The Chi-Square test (chi2 = 1.24, p = 0.265) is computed from `data/polygon_mainnet_transactions_zkp.csv`, observed frequencies against a uniform expectation, alpha = 0.05.
 
----
+## 7. Methodology
 
-## 7. Declaration of Generative AI Assistance
+The work follows the six-stage Design Science Research Methodology (Peffers et al., 2007): (1) problem identification, (2) solution objectives (< 10,000 gates, bytecode audit, alpha = 0.05 test), (3) design and development, (4) demonstration on Polygon Mainnet, (5) evaluation (Circom audit, Mythril, Hardhat, Chi-Square), (6) communication. The mainnet sample was undersampled from imbalanced logs (rejected records about 1.38%) to n = 229.
 
-In compliance with journal editorial guidelines:
-- **AI Tools Used**: OpenAI ChatGPT (GPT-4o) and Anthropic Claude / Antigravity AI assistant.
-- **Purpose**: Assisting in LaTeX formatting, code refactoring, writing unit test boilerplate, proofreading manuscript sections for grammatical clarity, and generating Markdown documentation.
-- **Author Accountability**: The human authors independently conceived, verified, and approved all circuit specifications, smart contracts, mathematical proofs, and empirical analyses reported in this publication.
+## 8. Declaration of Generative AI Assistance
 
----
+- **Tools:** Gemini (Google), ChatGPT (OpenAI), Claude (Anthropic).
+- **Purpose:** LaTeX formatting, code refactoring, test boilerplate, documentation, and grammar proofreading.
+- **Accountability:** the authors conceived, verified, and approved all circuits, contracts, proofs, and empirical analyses.
 
-## 8. Citation
-
-If you use this repository or dataset in your academic work, please cite our paper:
+## 9. Citation
 
 ```bibtex
 @article{nugraha2026bytecode,
-  title={Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge Identity Verification Architecture for Public-Sector Blockchain Platforms},
-  author={Nugraha, Archy Renaldy Pratama and Arkeman, Yandra and Hermadi, Irman and Nurhadryani, Yani},
-  journal={PeerJ Computer Science},
-  year={2026}
+  title   = {Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge Identity Verification Architecture for Public-Sector Blockchain Platforms},
+  author  = {Nugraha, Archy Renaldy Pratama and Arkeman, Yandra and Hermadi, Irman and Nurhadryani, Yani},
+  journal = {PeerJ Computer Science},
+  year    = {2026},
+  note    = {Archived at Zenodo, doi:10.5281/zenodo.XXXXXXX}
 }
 ```
 
----
+## 10. License and Contribution
 
-## 9. License
-
-This repository is distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
+Released under the MIT License (see `LICENSE`). Issues and pull requests are welcome.
