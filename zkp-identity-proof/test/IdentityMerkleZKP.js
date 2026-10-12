@@ -293,37 +293,37 @@ describe("IdentityMerkleZKP", function () {
       ).to.be.revertedWith("No Merkle root set");
     });
 
-    it("should allow multiple verifications from same user", async function () {
+    it("should block replay attack: 50/50 duplicate proofs blocked (Figure 5)", async function () {
       // Skip if using mock data
       if (!fs.existsSync(path.join(__dirname, "../build/proof.json"))) {
         this.skip();
         return;
       }
 
-      // First verification
+      // First verification: should succeed
       const tx1 = await identityMerkleZkp
         .connect(user1)
         .verifyIdentity(a, b, c, identityHash);
       const receipt1 = await tx1.wait();
-
-      // Second verification should succeed (no restrictions)
-      const tx2 = await identityMerkleZkp
-        .connect(user1)
-        .verifyIdentity(a, b, c, identityHash);
-      const receipt2 = await tx2.wait();
-
-      // Both should emit events
       const event1 = receipt1.logs.find(
         (log) =>
           identityMerkleZkp.interface.parseLog(log)?.name === "IdentityVerified"
       );
-      const event2 = receipt2.logs.find(
-        (log) =>
-          identityMerkleZkp.interface.parseLog(log)?.name === "IdentityVerified"
-      );
-
       expect(event1).to.not.be.undefined;
-      expect(event2).to.not.be.undefined;
+
+      // Simulate 50 duplicate replay attack attempts: all 50 must be blocked
+      let blockedCount = 0;
+      const totalReplayAttempts = 50;
+
+      for (let i = 0; i < totalReplayAttempts; i++) {
+        await expect(
+          identityMerkleZkp.connect(user2).verifyIdentity(a, b, c, identityHash)
+        ).to.be.revertedWith("Replay attack detected: proof already spent");
+        blockedCount++;
+      }
+
+      expect(blockedCount).to.equal(50);
+      console.log(`\n    ✔ Replay-attack simulation: ${blockedCount}/${totalReplayAttempts} (100%) duplicate proofs blocked by nullifier state-locking`);
     });
   });
 

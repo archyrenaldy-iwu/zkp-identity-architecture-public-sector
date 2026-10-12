@@ -22,13 +22,17 @@ contract IdentityMerkleZKP {
     // Administration
     address public admin;
 
+    // Deterministic nullifier anti-replay state-locking
+    mapping(bytes32 => bool) public nullifierSpent;
+
     // Events
     event MerkleRootUpdated(bytes32 indexed oldRoot, bytes32 indexed newRoot);
     event IdentityApproved(bytes32 indexed identityHash);
     event IdentityRevoked(bytes32 indexed identityHash);
     event IdentityVerified(
         address indexed verifier,
-        bytes32 indexed identityHash
+        bytes32 indexed identityHash,
+        bytes32 indexed nullifier
     );
     event AdminChanged(address indexed oldAdmin, address indexed newAdmin);
 
@@ -97,8 +101,8 @@ contract IdentityMerkleZKP {
     }
 
     /**
-     * @notice Verify identity using ZKP and Merkle inclusion proof
-     * @dev Anyone can verify multiple times - no restrictions
+     * @notice Verify identity using ZKP and Merkle inclusion proof with deterministic nullifier anti-replay
+     * @dev Replay attacks are blocked via nullifier state-locking
      * @param a ZKP proof component a
      * @param b ZKP proof component b
      * @param c ZKP proof component c
@@ -112,6 +116,10 @@ contract IdentityMerkleZKP {
     ) external returns (bool) {
         require(currentMerkleRoot != bytes32(0), "No Merkle root set");
 
+        // Deterministic nullifier derived from proof components and merkle root
+        bytes32 nullifier = keccak256(abi.encodePacked(a, b, c, currentMerkleRoot));
+        require(!nullifierSpent[nullifier], "Replay attack detected: proof already spent");
+
         // Prepare public input for verifier (only merkleRoot)
         uint[1] memory input;
         input[0] = uint256(currentMerkleRoot);
@@ -120,8 +128,11 @@ contract IdentityMerkleZKP {
         bool result = verifier.verifyProof(a, b, c, input);
         require(result, "Invalid ZK proof");
 
+        // State-lock the nullifier to prevent replay
+        nullifierSpent[nullifier] = true;
+
         // Emit event for tracking
-        emit IdentityVerified(msg.sender, identityHash);
+        emit IdentityVerified(msg.sender, identityHash, nullifier);
 
         return true;
     }

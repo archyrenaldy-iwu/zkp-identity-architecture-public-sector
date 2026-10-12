@@ -7,7 +7,7 @@
     "zkp:input": "node scripts/generate_input.js",
     "zkp:proof": "node scripts/generate_proof.js",
     "zkp:verify": "node scripts/verify_proof.js",
-    "test": "hardhat test test/IdentityMerkleZKP.js test/IdentityZKP.js"
+    "test": "hardhat test test/ReplayAttackSimulation.js test/IdentityMerkleZKP.js test/IdentityZKP.js"
   },
   "keywords": [],
   "author": "",
