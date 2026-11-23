@@ -1,0 +1,31 @@
+{
+  "title": "Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge Identity Verification Architecture for Public-Sector Blockchain Platforms",
+  "upload_type": "software",
+  "description": "Source code, smart contracts, zero-knowledge circuits, AI services, and datasets supporting PeerJ Computer Science manuscript CS-2026:08:147906.",
+  "creators": [
+    {
+      "name": "Nugraha, Archy Renaldy Pratama",
+      "affiliation": "IPB University; International Women University"
+    },
+    {
+      "name": "Arkeman, Yandra",
+      "affiliation": "IPB University"
+    },
+    {
+      "name": "Hermadi, Irman",
+      "affiliation": "IPB University"
+    },
+    {
+      "name": "Nurhadryani, Yani",
+      "affiliation": "IPB University"
+    }
+  ],
+  "keywords": [
+    "zero-knowledge proofs",
+    "Groth16",
+    "blockchain security",
+    "bytecode audit",
+    "decentralized identity",
+    "e-governance"
+  ]
+}

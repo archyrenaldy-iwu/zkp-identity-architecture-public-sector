@@ -15,4 +15,7 @@ authors:
     given-names: Yani
     affiliation: "IPB University"
 repository-code: "https://github.com/archyrenaldy-iwu/zkp-identity-architecture-public-sector"
-doi: 10.5281/zenodo.23334543
+license: MIT
+type: software
+date-released: 2026-10-16
+doi: 10.5281/zenodo.23334713

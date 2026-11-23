@@ -1,0 +1,73 @@
+# Node.js / Express dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.npm
+
+# Python / AI / Virtual Envs
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv
+
+# AI Model Weights & Large Datasets (Excluding Heavy Files)
+ai-service/SavedWeight/
+ai-service/NER-INDO/
+ai-service/pretrainedModel/
+*.data-00000-of-00001
+*.index
+*.h5
+*.pb
+*.onnx
+*.bin
+*.pt
+*.pth
+
+# Database files & Docker volume data
+ai-service/db/
+*.sqlite
+*.sqlite3
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE & OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Internal Research, Reference Files & Action Plan (Not for public repo)
+action-plan.md
+cs-147906-LaTeX_Template_for_PeerJ_Journal_Submissions__2_.pdf
+*.pdf
+ref/
+
+# Build / Hardhat outputs
+/sengketa-contract/artifacts/
+/sengketa-contract/cache/
+/zkp-identity-proof/build/
+/zkp-identity-proof/cache/
+dist/
+build/
+

@@ -27,5 +27,15 @@
     "bytecode audit",
     "decentralized identity",
     "e-governance"
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "publication_date": "2026-10-16",
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/archyrenaldy-iwu/zkp-identity-architecture-public-sector",
+      "scheme": "url"
+    }
   ]
 }
