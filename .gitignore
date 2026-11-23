@@ -71,3 +71,12 @@ ref/
 dist/
 build/
 
+# Internal notes (not for archive)
+panduan.md
+progress-update.md
+untitled folder/
+ai-service/!/
+*.local.md
+*.local/
+PEERJ_AI_CODE_TRANSPARENCY_DOCS.zip
+PAKET_FINAL_TUGAS_TIM_IT_PEERJ/

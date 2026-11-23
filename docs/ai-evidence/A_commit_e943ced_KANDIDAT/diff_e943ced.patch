@@ -1,0 +1,278 @@
+diff --git a/scripts/calculate_chi_square.py b/scripts/calculate_chi_square.py
+new file mode 100755
+index 0000000..f74c905
+--- /dev/null
++++ b/scripts/calculate_chi_square.py
+@@ -0,0 +1,52 @@
++#!/usr/bin/env python3
++"""
++Chi-Square Unlinkability Test Reproduction Script (Equation 4)
++Paper: Bytecode Security Auditing and Live Mainnet Validation of a Zero-Knowledge
++       Identity Verification Architecture for Public-Sector Blockchain Platforms
++"""
++
++import csv
++import math
++import os
++
++def calculate_chi_square():
++    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++    zkp_file = os.path.join(base_dir, "data/polygon_mainnet_transactions_zkp.csv")
++    sengketa_file = os.path.join(base_dir, "data/polygon_mainnet_transactions_sengketa.csv")
++
++    with open(zkp_file, mode="r", encoding="utf-8") as f:
++        zkp_txs = list(csv.DictReader(f))
++
++    with open(sengketa_file, mode="r", encoding="utf-8") as f:
++        sengketa_txs = list(csv.DictReader(f))
++
++    n_zkp = len(zkp_txs)
++    n_sengketa = len(sengketa_txs)
++    n_total = n_zkp + n_sengketa
++
++    # Observed frequencies across live mainnet contracts
++    O = [n_zkp, n_sengketa]
++    # Expected frequencies under uniform hypothesis (Equation 4)
++    E = [n_total / 2.0, n_total / 2.0]
++
++    # Chi-Square statistic: sum((O - E)^2 / E)
++    chi2 = sum((o - e) ** 2 / e for o, e in zip(O, E))
++
++    # Degrees of freedom = k - 1 = 2 - 1 = 1
++    # P-value for df=1: erfc(sqrt(chi2) / sqrt(2))
++    p_value = math.erfc(math.sqrt(chi2) / math.sqrt(2))
++
++    print("=" * 60)
++    print("CHI-SQUARE UNLINKABILITY TEST (Equation 4)")
++    print("=" * 60)
++    print(f"Sample Size (n):                 {n_total} transactions")
++    print(f"  - ZKP Identity Contract:       {n_zkp} observed")
++    print(f"  - Dispute Workflow Contract:   {n_sengketa} observed")
++    print(f"Expected Uniform Frequency (E):  {E[0]:.1f} per category")
++    print(f"Chi-Square Statistic (chi^2):    {chi2:.2f}")
++    print(f"p-value (alpha = 0.05):          {p_value:.3f}")
++    print(f"Conclusion:                      {'Fail to reject H0 (Sessions unlinkable)' if p_value > 0.05 else 'Reject H0'}")
++    print("=" * 60)
++
++if __name__ == "__main__":
++    calculate_chi_square()
+diff --git a/zkp-identity-proof/contracts/IdentityMerkleZKP.sol b/zkp-identity-proof/contracts/IdentityMerkleZKP.sol
+index c71aa67..8d39d06 100755
+--- a/zkp-identity-proof/contracts/IdentityMerkleZKP.sol
++++ b/zkp-identity-proof/contracts/IdentityMerkleZKP.sol
+@@ -22,13 +22,17 @@ contract IdentityMerkleZKP {
+     // Administration
+     address public admin;
+ 
++    // Deterministic nullifier anti-replay state-locking
++    mapping(bytes32 => bool) public nullifierSpent;
++
+     // Events
+     event MerkleRootUpdated(bytes32 indexed oldRoot, bytes32 indexed newRoot);
+     event IdentityApproved(bytes32 indexed identityHash);
+     event IdentityRevoked(bytes32 indexed identityHash);
+     event IdentityVerified(
+         address indexed verifier,
+-        bytes32 indexed identityHash
++        bytes32 indexed identityHash,
++        bytes32 indexed nullifier
+     );
+     event AdminChanged(address indexed oldAdmin, address indexed newAdmin);
+ 
+@@ -97,8 +101,8 @@ contract IdentityMerkleZKP {
+     }
+ 
+     /**
+-     * @notice Verify identity using ZKP and Merkle inclusion proof
+-     * @dev Anyone can verify multiple times - no restrictions
++     * @notice Verify identity using ZKP and Merkle inclusion proof with deterministic nullifier anti-replay
++     * @dev Replay attacks are blocked via nullifier state-locking
+      * @param a ZKP proof component a
+      * @param b ZKP proof component b
+      * @param c ZKP proof component c
+@@ -112,6 +116,10 @@ contract IdentityMerkleZKP {
+     ) external returns (bool) {
+         require(currentMerkleRoot != bytes32(0), "No Merkle root set");
+ 
++        // Deterministic nullifier derived from proof components and merkle root
++        bytes32 nullifier = keccak256(abi.encodePacked(a, b, c, currentMerkleRoot));
++        require(!nullifierSpent[nullifier], "Replay attack detected: proof already spent");
++
+         // Prepare public input for verifier (only merkleRoot)
+         uint[1] memory input;
+         input[0] = uint256(currentMerkleRoot);
+@@ -120,8 +128,11 @@ contract IdentityMerkleZKP {
+         bool result = verifier.verifyProof(a, b, c, input);
+         require(result, "Invalid ZK proof");
+ 
++        // State-lock the nullifier to prevent replay
++        nullifierSpent[nullifier] = true;
++
+         // Emit event for tracking
+-        emit IdentityVerified(msg.sender, identityHash);
++        emit IdentityVerified(msg.sender, identityHash, nullifier);
+ 
+         return true;
+     }
+diff --git a/zkp-identity-proof/contracts/MockGroth16Verifier.sol b/zkp-identity-proof/contracts/MockGroth16Verifier.sol
+new file mode 100644
+index 0000000..dd54cf1
+--- /dev/null
++++ b/zkp-identity-proof/contracts/MockGroth16Verifier.sol
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: MIT
++pragma solidity ^0.8.20;
++
++contract MockGroth16Verifier {
++    function verifyProof(
++        uint[2] calldata,
++        uint[2][2] calldata,
++        uint[2] calldata,
++        uint[1] calldata
++    ) external pure returns (bool) {
++        return true;
++    }
++}
+diff --git a/zkp-identity-proof/package.json b/zkp-identity-proof/package.json
+index 90d2688..7ba1e5c 100755
+--- a/zkp-identity-proof/package.json
++++ b/zkp-identity-proof/package.json
+@@ -7,7 +7,7 @@
+     "zkp:input": "node scripts/generate_input.js",
+     "zkp:proof": "node scripts/generate_proof.js",
+     "zkp:verify": "node scripts/verify_proof.js",
+-    "test": "hardhat test test/IdentityMerkleZKP.js test/IdentityZKP.js"
++    "test": "hardhat test test/ReplayAttackSimulation.js test/IdentityMerkleZKP.js test/IdentityZKP.js"
+   },
+   "keywords": [],
+   "author": "",
+diff --git a/zkp-identity-proof/test/IdentityMerkleZKP.js b/zkp-identity-proof/test/IdentityMerkleZKP.js
+index 2ab98d2..c211b52 100755
+--- a/zkp-identity-proof/test/IdentityMerkleZKP.js
++++ b/zkp-identity-proof/test/IdentityMerkleZKP.js
+@@ -293,37 +293,37 @@ describe("IdentityMerkleZKP", function () {
+       ).to.be.revertedWith("No Merkle root set");
+     });
+ 
+-    it("should allow multiple verifications from same user", async function () {
++    it("should block replay attack: 50/50 duplicate proofs blocked (Figure 5)", async function () {
+       // Skip if using mock data
+       if (!fs.existsSync(path.join(__dirname, "../build/proof.json"))) {
+         this.skip();
+         return;
+       }
+ 
+-      // First verification
++      // First verification: should succeed
+       const tx1 = await identityMerkleZkp
+         .connect(user1)
+         .verifyIdentity(a, b, c, identityHash);
+       const receipt1 = await tx1.wait();
+-
+-      // Second verification should succeed (no restrictions)
+-      const tx2 = await identityMerkleZkp
+-        .connect(user1)
+-        .verifyIdentity(a, b, c, identityHash);
+-      const receipt2 = await tx2.wait();
+-
+-      // Both should emit events
+       const event1 = receipt1.logs.find(
+         (log) =>
+           identityMerkleZkp.interface.parseLog(log)?.name === "IdentityVerified"
+       );
+-      const event2 = receipt2.logs.find(
+-        (log) =>
+-          identityMerkleZkp.interface.parseLog(log)?.name === "IdentityVerified"
+-      );
+-
+       expect(event1).to.not.be.undefined;
+-      expect(event2).to.not.be.undefined;
++
++      // Simulate 50 duplicate replay attack attempts: all 50 must be blocked
++      let blockedCount = 0;
++      const totalReplayAttempts = 50;
++
++      for (let i = 0; i < totalReplayAttempts; i++) {
++        await expect(
++          identityMerkleZkp.connect(user2).verifyIdentity(a, b, c, identityHash)
++        ).to.be.revertedWith("Replay attack detected: proof already spent");
++        blockedCount++;
++      }
++
++      expect(blockedCount).to.equal(50);
++      console.log(`\n    ✔ Replay-attack simulation: ${blockedCount}/${totalReplayAttempts} (100%) duplicate proofs blocked by nullifier state-locking`);
+     });
+   });
+ 
+diff --git a/zkp-identity-proof/test/ReplayAttackSimulation.js b/zkp-identity-proof/test/ReplayAttackSimulation.js
+new file mode 100644
+index 0000000..f72bc12
+--- /dev/null
++++ b/zkp-identity-proof/test/ReplayAttackSimulation.js
+@@ -0,0 +1,66 @@
++const { expect } = require("chai");
++const { ethers } = require("hardhat");
++
++describe("Replay-Attack Simulation (Figure 5)", function () {
++  let mockVerifier, identityMerkleZkp;
++  let admin, legitimateUser, attacker;
++
++  beforeEach(async function () {
++    [admin, legitimateUser, attacker] = await ethers.getSigners();
++
++    // Deploy MockGroth16Verifier
++    const MockVerifierFactory = await ethers.getContractFactory("MockGroth16Verifier");
++    mockVerifier = await MockVerifierFactory.connect(admin).deploy();
++    await mockVerifier.waitForDeployment();
++
++    const IdentityMerkleZKPFactory = await ethers.getContractFactory(
++      "contracts/IdentityMerkleZKP.sol:IdentityMerkleZKP"
++    );
++    identityMerkleZkp = await IdentityMerkleZKPFactory.connect(admin).deploy(
++      await mockVerifier.getAddress()
++    );
++    await identityMerkleZkp.waitForDeployment();
++
++    // Set sample Merkle root
++    const sampleMerkleRoot = "0x" + "1".repeat(64);
++    await identityMerkleZkp.connect(admin).updateMerkleRoot(sampleMerkleRoot);
++  });
++
++  it("should simulate replay attacks: 50 duplicate proofs submitted, 50/50 (100%) blocked", async function () {
++    const a = ["1", "2"];
++    const b = [
++      ["3", "4"],
++      ["5", "6"],
++    ];
++    const c = ["7", "8"];
++    const identityHash = "0x" + "2".repeat(64);
++
++    // 1. Initial verification by legitimate user must succeed
++    const tx = await identityMerkleZkp
++      .connect(legitimateUser)
++      .verifyIdentity(a, b, c, identityHash);
++    const receipt = await tx.wait();
++    expect(receipt.status).to.equal(1);
++
++    // 2. Replay simulation: submit 50 duplicate proofs
++    const totalReplayAttempts = 50;
++    let blockedCount = 0;
++
++    for (let i = 1; i <= totalReplayAttempts; i++) {
++      await expect(
++        identityMerkleZkp
++          .connect(attacker)
++          .verifyIdentity(a, b, c, identityHash)
++      ).to.be.revertedWith("Replay attack detected: proof already spent");
++      blockedCount++;
++    }
++
++    expect(blockedCount).to.equal(50);
++    console.log(`\n    ==================================================`);
++    console.log(`    [Figure 5 Replication Result]`);
++    console.log(`    Total Replay Attempts: ${totalReplayAttempts}`);
++    console.log(`    Total Blocked:         ${blockedCount} (100.0%)`);
++    console.log(`    State-Lock Status:     DETERMINISTIC NULLIFIER ACTIVE`);
++    console.log(`    ==================================================\n`);
++  });
++});
